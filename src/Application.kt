@@ -13,6 +13,8 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 @Suppress("unused") // Referenced in application.conf
 fun Application.module() {
+    val packages: Map<String, Package> = Parser.readPackages()
+
     install(FreeMarker) {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
     }
@@ -20,11 +22,15 @@ fun Application.module() {
     routing {
         get("/") {
             call.respond(FreeMarkerContent("index.ftl",
-                mapOf("data" to IndexData(listOf("one", "two", "three"))), ""))
+                mapOf("index.ftl" to Index(listOf("one", "two", "three"))), ""))
+        }
+        get("/packages/{id}") {
+            val id = call.parameters["id"] ?: ""
+            call.respond(FreeMarkerContent("package.ftl", packages[id]))
         }
     }
 
 }
 
-data class IndexData(val items: List<String>)
+data class Index(val items: List<String>)
 

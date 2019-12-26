@@ -1,7 +1,6 @@
-<#-- @ftlvariable name="data" type="fi.xylix.IndexData" -->
 <html>
 	<body>
-        <ul>
+        <ul style="list-style-type:none;">
             <#list data.items as item>
                 <tr>${item}</tr>
             </#list>

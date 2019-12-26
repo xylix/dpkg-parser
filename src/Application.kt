@@ -30,16 +30,29 @@ fun Application.module() {
         get("/") {
             call.respond(FreeMarkerContent(
                 template= "index.ftl",
-                model =  mapOf(Pair("packageList", packageList.map { pac -> toHtmlLink(pac.name)}))))
+                model =  mapOf("packageList" to toHtmlLinks(packageList))))
         }
         get("/packages/{id}") {
             val id = call.parameters["id"] ?: ""
+            val pack = packages[id]!!
             call.respond(FreeMarkerContent(
                 template = "package.ftl",
-                model =  mapOf(Pair("package", packages[id]), Pair("packageList", packageList))))
+                model =  mapOf(
+                    "package" to pack,
+                    "dependencyLinks" to stringsToLinks(pack.dependencies),
+                    "reverseDependencies" to packagesToLinks(pack.reverseDependencies(packageList)))
+            ))
         }
     }
 
+}
+
+fun stringsToLinks(packageList: List<String>): List<String> {
+    return packageList.map { toHtmlLink(it)}
+}
+
+fun packagesToLinks(packageList: List<Package>): List<String> {
+    return packageList.map { toHtmlLink(it.name)}
 }
 
 data class Index(val items: List<String>)

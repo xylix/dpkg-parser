@@ -37,15 +37,15 @@ object Parser {
         if (nameAt == -1) throw IllegalStateException("Illegal parsePackage call, no Package in $lines")
         val name = lines[nameAt].substringAfter(":").trim()
 
-        val dependsAt = lines.indexOfStartsWith("Depends")
+        val dependsAt = lines.indexOfStartsWith("Depends: ")
         var dependencies: List<String>? = null
-        if (dependsAt != -1) {  dependencies = parseDeps(lines[dependsAt].substringAfter(":")) }
+        if (dependsAt != -1) {  dependencies = parseDeps(lines[dependsAt].substringAfter(":").trim()) }
 
         val descriptionStart = lines.indexOfStartsWith("Description: ")
         var description: String? = null
         if (descriptionStart != -1) { description = captureMultiline(lines, descriptionStart) }
 
-        return Package(name, description ?: "", dependencies ?: listOf<String>())
+        return Package(name, description ?: "", dependencies ?: listOf())
 
     }
 
@@ -62,12 +62,12 @@ object Parser {
 
     private fun parseDeps(depends: String): List<String> {
         // Take `Depends` row and return it split by every comma, stripped of version numbers.
-        return depends.split(",").map { it.substringBefore('(') }
+        return depends.split(",").map { it.substringBefore('(').trim() }
     }
-}
 
-private fun List<String>.indexOfStartsWith(e: String): Int {
-    return this.indexOfFirst { it.startsWith(e) }
+    private fun List<String>.indexOfStartsWith(e: String): Int {
+        return this.indexOfFirst { it.startsWith(e) }
+    }
 }
 
 data class Package (val name: String, val description: String, val dependencies: List<String>) {

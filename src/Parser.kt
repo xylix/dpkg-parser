@@ -55,7 +55,7 @@ object Parser {
         for (line in continues) {
             // All lines except the first in a multiline segment
             if (Regex("^\\s*") !in line) break
-            value += line
+            value += " $line"
         }
         return value
     }

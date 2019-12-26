@@ -5,6 +5,9 @@ import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.*
 import io.ktor.freemarker.FreeMarker
 import io.ktor.freemarker.FreeMarkerContent
+import io.ktor.http.content.files
+import io.ktor.http.content.resources
+import io.ktor.http.content.static
 import io.ktor.response.respond
 import io.ktor.routing.get
 import io.ktor.routing.routing
@@ -30,7 +33,7 @@ fun Application.module() {
         get("/") {
             call.respond(FreeMarkerContent(
                 template= "index.ftl",
-                model =  mapOf("packageList" to toHtmlLinks(packageList))))
+                model =  mapOf("packageList" to packagesToLinks(packageList))))
         }
         get("/packages/{id}") {
             val id = call.parameters["id"] ?: ""

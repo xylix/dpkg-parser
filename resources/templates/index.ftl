@@ -1,8 +1,9 @@
+<#-- @ftlvariable name="packageList" type="java.util.List" -->
 <html>
 	<body>
         <ul style="list-style-type:none;">
-            <#list data.items as item>
-                <tr>${item}</tr>
+            <#list packageList as item>
+                <tr><td>${item}</td></tr>
             </#list>
         </ul>
     </body>

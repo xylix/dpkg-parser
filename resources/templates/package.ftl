@@ -1,7 +1,9 @@
+<#-- @ftlvariable name="package" type="fi.xylix.Package" -->
+<#-- @ftlvariable name="packageList" type="java.util.List" -->
 <html>
 	<body>
         <ul>
-            <li>${package.name}</li>
+            <li>Name: ${package.name}</li>
             <li>${package.description}</li>
             <li>
                 <ul style="list-style-type:none;">
@@ -9,11 +11,10 @@
                         <li>${dependency}</li>
                     </#list>
                 </ul>
-
             </li>
             <li>
                 <ul style="list-style-type:none;">
-                    <#list package.reverseDependencies as reverse>
+                    <#list package.reverseDependencies(packageList) as reverse>
                         <li>${reverse}</li>
                     </#list>
                 </ul>
@@ -22,7 +23,3 @@
         </ul>
     </body>
 </html>
-
-
-        val name: String, val description: String,
-        val dependencies: List<String>, val reverseDependencies: List<String>)

@@ -1,32 +1,42 @@
 package fi.xylix
 
+import fi.xylix.Parser.toHtmlLink
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.*
 import io.ktor.freemarker.FreeMarker
 import io.ktor.freemarker.FreeMarkerContent
 import io.ktor.response.respond
 import io.ktor.routing.get
-
 import io.ktor.routing.routing
 
-fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
+const val HOSTNAME = "0.0.0.0:8080"
+val packages = Parser.readPackages("status.real")
+val packageList: List<Package> =  packages.values.toList().sortedBy { it.name }
+
+
+fun main(args: Array<String>): Unit {
+    io.ktor.server.netty.EngineMain.main(args)
+}
+
 
 @Suppress("unused") // Referenced in application.conf
 fun Application.module() {
-    val packages: Map<String, Package> = Parser.readPackages()
-
+    // Init templating engine
     install(FreeMarker) {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
     }
 
     routing {
         get("/") {
-            call.respond(FreeMarkerContent("index.ftl",
-                mapOf("index.ftl" to Index(listOf("one", "two", "three"))), ""))
+            call.respond(FreeMarkerContent(
+                template= "index.ftl",
+                model =  mapOf(Pair("packageList", packageList.map { pac -> toHtmlLink(pac.name)}))))
         }
         get("/packages/{id}") {
             val id = call.parameters["id"] ?: ""
-            call.respond(FreeMarkerContent("package.ftl", packages[id]))
+            call.respond(FreeMarkerContent(
+                template = "package.ftl",
+                model =  mapOf(Pair("package", packages[id]), Pair("packageList", packageList))))
         }
     }
 

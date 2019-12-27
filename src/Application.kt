@@ -11,7 +11,7 @@ import io.ktor.response.respond
 import io.ktor.routing.get
 import io.ktor.routing.routing
 
-val HOSTNAME: String = System.getenv("HOSTNAME")
+val URL: String = System.getenv("HOSTNAME") + ":" +  System.getenv("PORT")
 val packages = Parser.readPackages("status.real")
 val packageList: List<Package> =  packages.values.toList().sortedBy { it.name }
 

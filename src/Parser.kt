@@ -68,7 +68,7 @@ object Parser {
     }
 
     fun toHtmlLink(name: String): String {
-        return "<a href=\"http://$HOSTNAME/packages/$name\">$name</a>"
+        return "<a href=\"http://$URL/packages/$name\">$name</a>"
     }
 }
 

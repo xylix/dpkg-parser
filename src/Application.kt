@@ -11,8 +11,9 @@ import io.ktor.http.content.static
 import io.ktor.response.respond
 import io.ktor.routing.get
 import io.ktor.routing.routing
+import java.lang.System.getProperty
 
-const val HOSTNAME = "0.0.0.0:8080"
+val HOSTNAME: String = getProperty("HOSTNAME")
 val packages = Parser.readPackages("status.real")
 val packageList: List<Package> =  packages.values.toList().sortedBy { it.name }
 

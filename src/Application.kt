@@ -38,6 +38,7 @@ fun Application.module() {
         get("/packages/{id}") {
             val id = call.parameters["id"] ?: ""
             val pack = packages[id]!!
+
             call.respond(FreeMarkerContent(
                 template = "package.ftl",
                 model =  mapOf(
@@ -50,12 +51,16 @@ fun Application.module() {
 
 }
 
-fun stringsToLinks(packageList: List<String>): List<String> {
-    return packageList.map { toHtmlLink(it)}
+fun stringsToLinks(strings: List<String>): List<String> {
+    // Create links where the referenced package exists on the system
+    return strings.map{
+        if (packages.containsKey(it)) toHtmlLink(it)
+        else it
+    }
 }
 
-fun packagesToLinks(packageList: List<Package>): List<String> {
-    return packageList.map { toHtmlLink(it.name)}
+fun packagesToLinks(packages: List<Package>): List<String> {
+    return packages.map { toHtmlLink(it.name)}
 }
 
 data class Index(val items: List<String>)

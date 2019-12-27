@@ -10,10 +10,6 @@ object Parser {
         return File(path.file)
     }
 
-    fun toHtmlLink(name: String): String {
-        return "<a href=\"http://$HOSTNAME/packages/$name\">$name</a>"
-    }
-
     fun readPackages(fileName: String): Map<String, Package> {
         val packages = mutableMapOf<String, Package>()
 
@@ -34,12 +30,12 @@ object Parser {
 
     private fun parsePackage(lines: List<String>): Package {
         val nameAt = lines.indexOfStartsWith("Package: ")
-        if (nameAt == -1) throw IllegalStateException("Illegal parsePackage call, no Package in $lines")
+        if (nameAt == -1) throw IllegalStateException("Invalid Package data, no Package in $lines")
         val name = lines[nameAt].substringAfter(":").trim()
 
         val dependsAt = lines.indexOfStartsWith("Depends: ")
         var dependencies: List<String>? = null
-        if (dependsAt != -1) {  dependencies = parseDeps(lines[dependsAt].substringAfter(":").trim()) }
+        if (dependsAt != -1) {  dependencies = parseDepends(lines[dependsAt].substringAfter(":").trim()) }
 
         val descriptionStart = lines.indexOfStartsWith("Description: ")
         var description: String? = null
@@ -49,24 +45,30 @@ object Parser {
 
     }
 
+    private fun parseDepends(depends: String): List<String> {
+        // Take `Depends` row and return it split by every comma, stripped of version numbers
+        // and split at OR operators.
+        return depends.split(",", "|").map { it.substringBefore('(').trim() }
+
+    }
+
     private fun captureMultiline(lines: List<String>, begins: Int): String {
         var value = lines.first()
         val continues = lines.subList(begins + 1, lines.size)
         for (line in continues) {
             // All lines except the first in a multiline segment
             if (Regex("^\\s*") !in line) break
-            value += " $line"
+            value += line
         }
         return value
     }
 
-    private fun parseDeps(depends: String): List<String> {
-        // Take `Depends` row and return it split by every comma, stripped of version numbers.
-        return depends.split(",").map { it.substringBefore('(').trim() }
-    }
-
     private fun List<String>.indexOfStartsWith(e: String): Int {
         return this.indexOfFirst { it.startsWith(e) }
+    }
+
+    fun toHtmlLink(name: String): String {
+        return "<a href=\"http://$HOSTNAME/packages/$name\">$name</a>"
     }
 }
 

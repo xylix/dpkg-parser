@@ -16,7 +16,7 @@
             <tr>
                 <td>Dependencies: </td>
                 <td>
-                    <ul>
+                    <ul class="pure-menu-list">
                         <#list dependencyLinks as dependency>
                             <li>${dependency}</li>
                         </#list>
@@ -26,7 +26,7 @@
             <tr>
                 <td>Reverse Dependencies: </td>
                 <td>
-                    <ul>
+                    <ul class="pure-menu-list">
                         <#list reverseDependencies as reverse>
                             <li>${reverse}</li>
                         </#list>

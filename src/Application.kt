@@ -2,23 +2,21 @@ package fi.xylix
 
 import fi.xylix.Parser.toHtmlLink
 import freemarker.cache.ClassTemplateLoader
-import io.ktor.application.*
+import io.ktor.application.Application
+import io.ktor.application.call
+import io.ktor.application.install
 import io.ktor.freemarker.FreeMarker
 import io.ktor.freemarker.FreeMarkerContent
-import io.ktor.http.content.files
-import io.ktor.http.content.resources
-import io.ktor.http.content.static
 import io.ktor.response.respond
 import io.ktor.routing.get
 import io.ktor.routing.routing
-import java.lang.System.getProperty
 
-val HOSTNAME: String = getProperty("HOSTNAME")
+val HOSTNAME: String = System.getenv("HOSTNAME")
 val packages = Parser.readPackages("status.real")
 val packageList: List<Package> =  packages.values.toList().sortedBy { it.name }
 
 
-fun main(args: Array<String>): Unit {
+fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
 }
 

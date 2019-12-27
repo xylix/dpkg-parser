@@ -11,15 +11,13 @@ import io.ktor.response.respond
 import io.ktor.routing.get
 import io.ktor.routing.routing
 
-val URL: String = System.getenv("HOSTNAME") + ":" +  System.getenv("PORT")
+val HOSTNAME: String = System.getenv("HOSTNAME")
 val packages = Parser.readPackages("status.real")
 val packageList: List<Package> =  packages.values.toList().sortedBy { it.name }
-
 
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
 }
-
 
 @Suppress("unused") // Referenced in application.conf
 fun Application.module() {

@@ -5,9 +5,7 @@ import java.io.FileNotFoundException
 
 object Parser {
     private fun readFile(filename: String): File {
-        val path = Parser.javaClass.classLoader.getResource(filename) ?:
-            throw FileNotFoundException("File $filename not found")
-        return File(path.file)
+        return File("./$filename")
     }
 
     fun readPackages(fileName: String): Map<String, Package> {
@@ -68,7 +66,7 @@ object Parser {
     }
 
     fun toHtmlLink(name: String): String {
-        return "<a href=\"http://$URL/packages/$name\">$name</a>"
+        return "<a href=\"$HOSTNAME/packages/$name\">$name</a>"
     }
 }
 

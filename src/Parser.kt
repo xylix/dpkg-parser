@@ -52,10 +52,13 @@ object Parser {
 
     private fun captureMultiline(lines: List<String>, begins: Int): String {
         var value = lines.first()
-        val continues = lines.subList(begins + 1, lines.size)
-        for (line in continues) {
-            // All lines except the first in a multiline segment
-            if (Regex("^\\s*") !in line) break
+        val possiblyIndentedLines = lines.subList(begins + 1, lines.size)
+        for (line in possiblyIndentedLines) {
+            /* All lines except the first in a multiline segment are intended.
+             *  We use this to stop parsing when a segment ends */
+            if (!line[0].isWhitespace()) break
+            // Ignore formatting rows which consist of just dots.
+            if (line == ".") continue
             value += line
         }
         return value

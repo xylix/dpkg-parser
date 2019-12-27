@@ -57,9 +57,13 @@ object Parser {
             /* All lines except the first in a multiline segment are intended.
              *  We use this to stop parsing when a segment ends */
             if (!line[0].isWhitespace()) break
-            // Ignore formatting rows which consist of just dots.
-            if (line == ".") continue
-            value += line
+            value += when {
+                // Add newlines in place full-stop formatting rows
+                line == " ." -> "<br></br>"
+                // Match list item rows, they start with whitespace and contain a * to signify items
+                line.contains(Regex("\\s*\\*")) -> "<li>${line.substringAfter("*")}</li>"
+                else -> line
+            }
         }
         return value
     }

@@ -47,7 +47,6 @@ object Parser {
         // Take `Depends` row and return it split by every comma, stripped of version numbers
         // and split at OR operators.
         return depends.split(",", "|").map { it.substringBefore('(').trim() }
-
     }
 
     private fun captureMultiline(lines: List<String>, begins: Int): String {

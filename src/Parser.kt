@@ -71,9 +71,6 @@ object Parser {
         return this.indexOfFirst { it.startsWith(e) }
     }
 
-    fun toHtmlLink(name: String): String {
-        return "<a href=\"$HOSTNAME/packages/$name\">$name</a>"
-    }
 }
 
 data class Package (val name: String, val description: String, val dependencies: List<String>) {

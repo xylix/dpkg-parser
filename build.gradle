@@ -10,7 +10,7 @@ buildscript {
 apply plugin: 'kotlin'
 apply plugin: 'application'
 
-group 'fi.xylix'
+group 'fi.xylix.dpkg'
 version '0.0.1-SNAPSHOT'
 mainClassName = "io.ktor.server.netty.EngineMain"
 

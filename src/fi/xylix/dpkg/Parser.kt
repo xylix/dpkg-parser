@@ -1,7 +1,6 @@
-package fi.xylix
+package fi.xylix.dpkg
 
 import java.io.File
-import java.io.FileNotFoundException
 
 object Parser {
     private fun readFile(filename: String): File {
@@ -70,7 +69,6 @@ object Parser {
     private fun List<String>.indexOfStartsWith(e: String): Int {
         return this.indexOfFirst { it.startsWith(e) }
     }
-
 }
 
 data class Package (val name: String, val description: String, val dependencies: List<String>) {
